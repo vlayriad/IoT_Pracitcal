@@ -1,15 +1,13 @@
 #include <Arduino.h>
 
-/* Berapa banyak LED yang akan dikendalikan */
-#define LED_COUNT 3
-
 /* Daftar pin LED yang akan dikendalikan */
-int ledPins[LED_COUNT] = {4, 16, 15}; // Ganti dengan pin yang sesuai
+int ledPins[] = {15, 4, 5}; // Ganti dengan pin yang sesuai
 
 void setup()
 {
   /* Inisialisasi pin LED */
-  for (int i = 0; i < LED_COUNT; i++) {
+  int lengthArr = sizeof(ledPins) / sizeof(ledPins[0]);
+  for (int i = 0; i < lengthArr; i++) {
     pinMode(ledPins[i], OUTPUT);
     digitalWrite(ledPins[i], LOW); // Matikan semua LED saat inisialisasi
   }
@@ -19,6 +17,8 @@ void setup()
 
 void loop()
 {
+  int lengthArr = sizeof(ledPins) / sizeof(ledPins[0]); // Pindahkan deklarasi ke dalam loop()
+
   if (Serial.available() > 0)
   {
     /* Baca input dari Serial Monitor */
@@ -29,10 +29,10 @@ void loop()
 
     if (numericValue != 0) {
       /* Matikan semua LED terlebih dahulu */
-      for (int i = 0; i < LED_COUNT; i++) {
+      for (int i = 0; i < lengthArr; i++) {
         digitalWrite(ledPins[i], LOW);
       }
-      if (numericValue <= LED_COUNT) {
+      if (numericValue <= lengthArr && numericValue >= 1) {
         /* Nyalakan LED dengan nomor sesuai input */
         digitalWrite(ledPins[numericValue - 1], HIGH);
         Serial.print("LED ");
